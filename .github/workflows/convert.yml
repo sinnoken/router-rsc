@@ -1,0 +1,29 @@
+name: Convert IP List to RouterOS Commands
+
+on:
+  workflow_dispatch:  # 手動觸發工作流程
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install requests
+      run: pip install requests
+
+    - name: Run conversion script
+      run: python convert_to_routeros.py
+
+    - name: Upload converted file
+      uses: actions/upload-artifact@v2
+      with:
+        name: routeros-commands
+        path: routeros_commands.txt
