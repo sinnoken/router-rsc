@@ -32,7 +32,7 @@ jobs:
       run: |
         git config user.name 'github-actions[bot]'
         git config user.email 'github-actions[bot]@users.noreply.github.com'
-        git add ipsum-Level3.rsc
+        git add rsc/ipsum-Level3.rsc
         git commit -m "Update RouterOS commands"
         git push
       env:
@@ -41,7 +41,7 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        files: ipsum-Level3.rsc
+        files: rsc/ipsum-Level3.rsc
         name: Automatic list generation
         tag_name: ${{ env.TAG_NAME }}
       env:

@@ -6,7 +6,7 @@ response = requests.get(url)
 ip_list = response.text.splitlines()
 
 # 轉換成 RouterOS 指令
-output_file = 'ipsum-Level3.rsc'
+output_file = 'rsc/ipsum-Level3.rsc'
 with open(output_file, 'w') as f:
     for line in ip_list:
         # 跳過註解行
