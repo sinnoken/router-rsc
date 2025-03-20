@@ -47,7 +47,6 @@ jobs:
         files: ipsum-Level3.rsc
         name: Automatic list generation
         tag_name: ${{ env.TAG_NAME }}
-        body_path: release.md
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
