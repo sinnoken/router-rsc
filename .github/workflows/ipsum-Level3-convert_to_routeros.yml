@@ -1,9 +1,6 @@
 name: Convert IP List to RouterOS Commands
 
 on:
-  push:
-    branches: [ main ]
-
   schedule:
   - cron: "0 15 * * *"
 
