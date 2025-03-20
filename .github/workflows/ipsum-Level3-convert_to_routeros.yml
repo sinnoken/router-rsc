@@ -1,4 +1,4 @@
-name: Convert IP List to RouterOS Commands
+name: Convert stamparm/ipsum list of bad IPs(level3) to RouterOS addressList
 
 on:
   schedule:
