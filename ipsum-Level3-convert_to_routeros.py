@@ -18,4 +18,4 @@ with open(output_file, 'w') as f:
         if line.startswith('#') or not line.strip():
             continue
         ip_address = line.split()[0]  # 假設 IP 位址在每行的第一個位置
-        f.write(f'/ip firewall address-list add address={ip_address} comment={comment} list={list}\n')
+        f.write(f'/ip firewall address-list add address={ip_address.ljust(15)} comment={comment} list={list}\n')
