@@ -1,5 +1,9 @@
 # 自動化地從網路上獲取 IP 清單，並將其轉換為 RouterOS 可用的防火牆配置指令，方便用戶將這些 IP 地址添加到 RouterOS 的地址列表中以進行管理或過濾
 
+## 安裝方式
+參考 [HybridNetworks / BlackListBox]([https://markdown.com.cn](https://github.com/HybridNetworks/BlackListBox?tab=readme-ov-file#mikrotik-routeros-v6--v7)
+
+## 產生步驟
 要使用 GitHub Actions 將一個 IP 清單文字檔轉換成 RouterOS 的新增 IP 清單指令，你可以按照以下步驟進行：
 
 ## 建立 GitHub 儲存庫
