@@ -1,18 +1,31 @@
+name: checkout stamparm/ipsum list
+
+on:
+  schedule:
+  - cron: "20 2 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Checkout another repository
       uses: actions/checkout@v2
       with:
-        repository: owner/other-repo  # 替換為目標儲存庫的擁有者和名稱
-        path: other-repo
+        repository: stamparm/ipsum  # 替換為目標儲存庫的擁有者和名稱
+        path: ipsum
         ref: main  # 替換為目標儲存庫的分支或標籤
 
     - name: Copy specific file
-      run: cp other-repo/path/to/file.txt ./path/to/destination/
+      run: |
+        cp ipsum/levels/*.txt ./ipsum/levels/*.txt
 
     - name: Commit changes
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add .
         git commit -m "Add file from another repository"
         git push
       env:
