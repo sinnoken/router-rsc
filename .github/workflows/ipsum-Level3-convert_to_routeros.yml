@@ -2,7 +2,7 @@ name: Convert stamparm/ipsum list of bad IPs(level3) to RouterOS addressList
 
 on:
   schedule:
-  - cron: "0 15 * * *"
+  - cron: "20 2 * * *"
 
   workflow_dispatch:
 
@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@master
       with:
         python-version: '3.x'
 
