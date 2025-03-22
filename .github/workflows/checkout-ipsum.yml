@@ -11,8 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
     - name: Checkout another repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: stamparm/ipsum  # 替換為目標儲存庫的擁有者和名稱
         path: ipsum
