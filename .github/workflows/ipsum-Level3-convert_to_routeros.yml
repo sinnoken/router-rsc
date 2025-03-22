@@ -47,9 +47,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload log files
-      uses: actions/upload-artifact@master
-      with:
-        name: Logs
-        path: logs/*.log
-      if: ${{ always() }}
+#    - name: Upload log files
+#      uses: actions/upload-artifact@master
+#      with:
+#        name: Logs
+#        path: logs/*.log
+#      if: ${{ always() }}
