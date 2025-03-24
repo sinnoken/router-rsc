@@ -34,7 +34,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Release
-      uses: softprops/action-gh-release@main
+      uses: softprops/action-gh-release@master
       with:
         files: ./rsc/*.rsc
         name: Automatic list generation
