@@ -11,22 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@main
+      
     - name: Set up Python
-      uses: actions/setup-python@master
+      uses: actions/setup-python@main
       with:
         python-version: '3.x'
         
     - name: Install requests
       run: pip install requests
-      
-    - name: Checkout repository
-      uses: actions/checkout@master
-
-    - name: Generate tag name
-      run: echo "TAG_NAME=$(date +%F-%H-%M)" >> $GITHUB_ENV
 
     - name: Run python conversion script
       run: python ./ipsum-Level3-convert_to_routeros.py
+
+    - name: Generate tag name
+      run: echo "TAG_NAME=$(date +%F-%H-%M)" >> $GITHUB_ENV
 
     - name: Commit & Push changes
       uses: actions-js/push@master
@@ -34,7 +34,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Release
-      uses: softprops/action-gh-release@master
+      uses: softprops/action-gh-release@main
       with:
         files: ./rsc/*.rsc
         name: Automatic list generation
@@ -43,7 +43,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Delete older releases
-      uses: dev-drprasad/delete-older-releases@master
+      uses: dev-drprasad/delete-older-releases@main
       with:
         keep_latest: 2
         delete_tags: true
