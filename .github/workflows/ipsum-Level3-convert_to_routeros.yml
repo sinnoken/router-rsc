@@ -21,7 +21,7 @@ jobs:
         cache: 'pip' # caching pip dependencies
         
     - name: Install requests
-      run: pip install requests ipaddress
+      run: pip install -r requirements.txt
 
     - name: Run python conversion script
       run: python ./ipsum-Level3-convert_to_routeros.py
