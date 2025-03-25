@@ -20,7 +20,7 @@ jobs:
         python-version: '3.x'
         
     - name: Install requests
-      run: pip install requests
+      run: pip install requests ipaddress
 
     - name: Run python conversion script
       run: python ./ipsum-Level3-convert_to_routeros.py
