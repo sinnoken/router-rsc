@@ -1,5 +1,6 @@
 import os
 import requests
+import ipaddress
 
 # 確保目錄存在
 output_dir = './rsc/'
@@ -29,12 +30,24 @@ for url in urls:
     response = requests.get(url)
     ip_list = response.text.splitlines()
 
+    # 過濾並排序 IP 地址
+    valid_ips = []
+    for line in ip_list:
+        if line.startswith('#') or not line.strip():  # 跳過註解或空行
+            continue
+        ip_address = line.split()[0]  # 取每行的第一個欄位作為 IP
+        try:
+            # 驗證 IP 地址並添加到清單
+            valid_ips.append(ipaddress.ip_address(ip_address))
+        except ValueError:
+            continue
+
+    # 排序 IP 地址
+    valid_ips.sort()
+
     # 轉換並寫入 RouterOS 指令
     with open(output_file, 'w') as f:
-        for line in ip_list:
-            if line.startswith('#') or not line.strip():  # 跳過註解或空行
-                continue
-            ip_address = line.split()[0]  # 取每行的第一個欄位作為 IP
-            f.write(f'/ip firewall address-list add address={ip_address.ljust(15)} comment={comment} list={list_name}\n')
+        for ip in valid_ips:
+            f.write(f'/ip firewall address-list add address={str(ip).ljust(15)} comment={comment} list={list_name}\n')
 
     print(f'已儲存 {output_file}')
