@@ -18,6 +18,7 @@ jobs:
       uses: actions/setup-python@main
       with:
         python-version: '3.x'
+        cache: 'pip' # caching pip dependencies
         
     - name: Install requests
       run: pip install requests ipaddress
