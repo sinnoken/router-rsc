@@ -1,6 +1,7 @@
 import os
 import requests
 import ipaddress
+from concurrent.futures import ThreadPoolExecutor
 
 # 確保目錄存在
 output_dir = './rsc/'
@@ -21,33 +22,36 @@ urls = [
 # RouterOS 設定
 comment = 'IPsum-Threat-Intelligence-Feed'
 
-for url in urls:
-    level = url.split('/')[-1].split('.')[0].replace('level', '')  # 取得 Level 數字
+def process_url(session, url):
+    """下載資料並處理 IP 地址"""
+    level = url.split('/')[-1].split('.')[0].replace('level', '')
     list_name = f'HN-BLACKLIST-IPSUM-L{level}'
     output_file = os.path.join(output_dir, f'ipsum-Level{level}.rsc')
 
-    # 下載資料
-    response = requests.get(url)
+    response = session.get(url)
     ip_list = response.text.splitlines()
 
-    # 過濾並排序 IP 地址
-    valid_ips = []
-    for line in ip_list:
-        if line.startswith('#') or not line.strip():  # 跳過註解或空行
-            continue
-        ip_address = line.split()[0]  # 取每行的第一個欄位作為 IP
-        try:
-            # 驗證 IP 地址並添加到清單
-            valid_ips.append(ipaddress.ip_address(ip_address))
-        except ValueError:
-            continue
+    # 使用集合來去重和驗證 IP 地址
+    valid_ips = {ipaddress.ip_address(line.split()[0]) for line in ip_list if line and not line.startswith('#')}
+    sorted_ips = sorted(valid_ips)
 
-    # 排序 IP 地址
-    valid_ips.sort()
+    # 生成 RouterOS 指令
+    commands = [
+        f'/ip firewall address-list add address={str(ip).ljust(15)} comment={comment} list={list_name}\n'
+        for ip in sorted_ips
+    ]
 
-    # 轉換並寫入 RouterOS 指令
+    # 批量寫入文件
     with open(output_file, 'w') as f:
-        for ip in valid_ips:
-            f.write(f'/ip firewall address-list add address={str(ip).ljust(15)} comment={comment} list={list_name}\n')
+        f.writelines(commands)
 
     print(f'已儲存 {output_file}')
+
+def main():
+    """主函數，使用多線程加速處理"""
+    with requests.Session() as session:
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            executor.map(lambda url: process_url(session, url), urls)
+
+if __name__ == '__main__':
+    main()
