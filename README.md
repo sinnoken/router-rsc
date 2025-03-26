@@ -1,85 +1,35 @@
-# 自動下載IP清單轉成RouterOS的防火牆清單指令
+# IPsum Threat Intelligence Feed Processor
 
-這個專案的目的是自動從指定來源下載 IP 清單，並將其轉換為適用於 RouterOS 的防火牆清單指令。這樣可以有效地管理和更新防火牆規則，提升網路安全性。
+這個 Python 程式用於從 IPsum 項目中下載威脅情報資料，並生成適用於 RouterOS 的防火牆地址列表配置文件。
 
-## 安裝方式
+## 功能
 
-參考 [HybridNetworks / BlackListBox](https://github.com/HybridNetworks/BlackListBox?tab=readme-ov-file#mikrotik-routeros-v6--v7)
+- 從多個 URL 下載 IP 地址清單。
+- 驗證並去重 IP 地址。
+- 生成 RouterOS 防火牆地址列表的配置指令。
+- 支援多線程處理以加速下載和處理過程。
 
-## 產生步驟
+## 使用方法
 
-要使用 GitHub Actions 將一個 IP 清單文字檔轉換成 RouterOS 的新增 IP 清單指令，你可以按照以下步驟進行：
+1. 確保已安裝 Python 3.x 和 `requests` 套件。
+2. 將程式碼克隆或下載到本地。
+3. 執行程式：
 
-## 建立 GitHub 儲存庫
+   ```bash
+   python script_name.py
 
-如果你還沒有專案，先在 GitHub 上建立一個新的儲存庫。
-撰寫轉換腳本：
+4. 生成的 .rsc 配置文件將儲存在 ./rsc/ 目錄中。
 
-撰寫一個 Python 腳本來下載 IP 清單並轉換成 RouterOS 指令格式。
-例如，使用 Python 來完成這個任務：
+## 需求
 
-```python
-import requests
+- Python 3.x
+- requests 套件
 
-# 下載 IP 清單
-url = 'https://github.com/stamparm/ipsum/raw/refs/heads/master/levels/3.txt'
-response = requests.get(url)
-ip_list = response.text.splitlines()
+## 注意事項
 
-# 轉換成 RouterOS 指令
-output_file = 'routeros_commands.txt'
-with open(output_file, 'w') as f:
-    for line in ip_list:
-        # 跳過註解行
-        if line.startswith('#') or not line.strip():
-            continue
-        ip_address = line.split()[0]  # 假設 IP 位址在每行的第一個位置
-        f.write(f'/ip firewall address-list add list=drop_traffic address={ip_address}/32\n')
-```
+- 請確保目標設備的 RouterOS 版本支援生成的配置指令。
+- 根據需要調整 urls 列表以匹配不同的威脅情報等級。
 
-## 將腳本上傳到 GitHub
+## 貢獻
 
-將這個腳本（例如 convert_to_routeros.py）上傳到你的 GitHub 儲存庫。
-設定 GitHub Actions：
-
-在你的儲存庫中，建立一個 .github/workflows 目錄。
-
-在這個目錄中，建立一個 YAML 檔案（例如 convert.yml）來定義 GitHub Actions 工作流程：
-
-```yml
-name: Convert IP List to RouterOS Commands
-
-on:
-  workflow_dispatch:  # 手動觸發工作流程
-
-jobs:
-  convert:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install requests
-      run: pip install requests
-
-    - name: Run conversion script
-      run: python convert_to_routeros.py
-
-    - name: Upload converted file
-      uses: actions/upload-artifact@v2
-      with:
-        name: routeros-commands
-        path: routeros_commands.txt
-```
-
-## 執行工作流程
-
-這個工作流程設定為手動觸發（workflow_dispatch），你可以在 GitHub Actions 頁面手動啟動它。
-轉換後的 RouterOS 指令檔案會作為 artifact 上傳，你可以從 GitHub Actions 的執行結果頁面下載。
-這樣，你就可以自動化地將 IP 清單轉換成 RouterOS 的新增 IP 清單指令。記得根據你的實際需求調整腳本和工作流程設定。
+歡迎提交問題報告和功能請求，或通過提交 Pull Request 來貢獻代碼。
